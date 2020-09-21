@@ -1,0 +1,100 @@
+{
+  "days": [
+    {
+      "date": "2020-09-21T09:00:04.206Z",
+      "nodes": [
+{"type": "activity",
+         "category":"sightsee",
+          "cost": 0,
+          "rating": 4,
+          "review": "it is a lively place",
+            "timeStart": "2020-09-11T15:30:02.578Z",
+"timeEnd": "2020-09-11T16:30:02.578Z"},
+
+{"type": "activity",
+         "category":"shopping",
+          "cost": 3000,
+          "rating": 4,
+          "review": "nice place to shop",
+          "location": "asakusa",
+            "timeStart": "2020-09-11T16:30:02.578Z",
+"timeEnd": "2020-09-11T17:30:02.578Z"},
+
+{"type": "leg",
+         "from":"asakusa station",
+         "to": "tokyo station",
+          "cost": 500,
+          "transportMode": "train",
+            "startOn": "2020-09-11T19:00:02.578Z",
+"returnDate": "2020-09-11T21:30:02.578Z"},
+
+{"type": "leg",
+         "from":"tokyo station",
+         "to": "hakone station",
+          "cost": 2000,
+          "transportMode": "train",
+            "startOn": "2020-09-11T19:00:02.578Z",
+"returnDate": "2020-09-11T21:30:02.578Z"},
+
+{"type": "leg",
+         "from":"hakone station",
+         "to": "owakudani",
+          "cost": 1000,
+          "transportMode": "bus",
+            "startOn": "2020-09-11T19:00:02.578Z",
+"returnDate": "2020-09-11T19:30:02.578Z"},
+
+{"type": "activity",
+         "category":"sightsee",
+          "cost": 1000,
+          "rating": 4,
+          "review": "sightsee volcano, very nice",
+            "timeStart": "2020-09-11T17:30:02.578Z",
+"timeEnd": "2020-09-11T19:00:02.578Z"},
+
+{"type": "leg",
+         "from":"owakudani",
+         "to": "tenzan onsen",
+          "cost": 500,
+          "transportMode": "bus",
+            "startOn": "2020-09-11T19:00:02.578Z",
+"returnDate": "2020-09-11T19:30:02.578Z"},
+
+{"type": "activity",
+         "category":"onsen",
+          "cost": 1200,
+          "rating": 5,
+          "review": "quiet and relaxing",
+            "timeStart": "2020-09-11T17:30:02.578Z",
+"timeEnd": "2020-09-11T18:00:02.578Z"},
+
+{"type": "leg",
+         "from":"tenzan onsen",
+         "to": "hakone station",
+          "cost": 500,
+          "transportMode": "bus",
+            "startOn": "2020-09-11T19:00:02.578Z",
+"returnDate": "2020-09-11T20:00:02.578Z"},
+
+
+{"type": "leg",
+         "from":"hakone station",
+         "to": "tokyo station",
+          "cost": 2000,
+          "transportMode": "bus",
+            "startOn": "2020-09-11T19:00:02.578Z",
+"returnDate": "2020-09-11T20:00:02.578Z"},
+
+{"type": "activity",
+         "category":"food",
+          "cost": 2000,
+          "rating": 3,
+          "review": "pizza for dinner",
+            "timeStart": "2020-09-11T17:30:02.578Z",
+"timeEnd": "2020-09-11T18:00:02.578Z"}
+      ]
+    }
+  ],
+  "name": "string",
+  "title": "string"
+}
