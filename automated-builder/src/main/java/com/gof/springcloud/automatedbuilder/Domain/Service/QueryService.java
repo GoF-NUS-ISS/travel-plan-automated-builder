@@ -1,24 +1,18 @@
 package com.gof.springcloud.automatedbuilder.Domain.Service;
 
-import com.gof.springcloud.automatedbuilder.Domain.Graph.TravelActivity.Activity;
-import com.gof.springcloud.automatedbuilder.Domain.Graph.TravelLeg.Leg;
+import com.gof.springcloud.automatedbuilder.Domain.Graph.AbstractNodeEntity;
 import com.gof.springcloud.automatedbuilder.Domain.Repository.ITravelRepository;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 public class QueryService implements IQueryService {
 
-    private final ITravelRepository orderRepository;
+    private final ITravelRepository repository;
 
-    public QueryService (final ITravelRepository orderRepository){
-        this.orderRepository = orderRepository;
+    public QueryService (final ITravelRepository repository){
+        this.repository = repository;
     }
 
     @Override
-    public void SaveAll(List<Leg> travelLegList, List<Activity> activityList){
-        orderRepository.SaveAllActivity(activityList);
-        orderRepository.SaveAllLeg(travelLegList);
+    public void Save(AbstractNodeEntity entity){
+        repository.Save(entity);
     }
 }

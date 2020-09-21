@@ -1,12 +1,12 @@
 package com.gof.springcloud.automatedbuilder.Domain.Graph.TravelActivity;
 
-import org.neo4j.ogm.annotation.GeneratedValue;
-import org.neo4j.ogm.annotation.Id;
+import com.gof.springcloud.automatedbuilder.Domain.Graph.AbstractNodeEntity;
+import com.gof.springcloud.automatedbuilder.Domain.Graph.TravelLeg.Location;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
 @NodeEntity
-public class Activity {
+public class Activity extends AbstractNodeEntity {
 
     public Activity(){
         this.location = new Location();
@@ -17,19 +17,7 @@ public class Activity {
         this.review = new Review();
     }
 
-    @Id
-    @GeneratedValue
-    private Long Id;
-
-    public Long getId() {
-        return Id;
-    }
-
-    public void setId(Long id) {
-        Id = id;
-    }
-
-    @Relationship(type = "DONE_IN")
+    @Relationship(type = "IS_LOCATED_IN")
     private Location location;
 
     @Relationship(type = "CATEGORY")
@@ -46,6 +34,17 @@ public class Activity {
 
     @Relationship(type = "HAS_REVIEW")
     private Review review;
+
+    @Relationship(type = "IS_NEXT_TO")
+    private Activity activity;
+
+    public Activity getActivity() {
+        return activity;
+    }
+
+    public void setActivity(Activity activity) {
+        this.activity = activity;
+    }
 
     public Location getLocation() {
         return location;
