@@ -1,98 +1,87 @@
 package com.gof.springcloud.automatedbuilder.Domain.Graph.TravelActivity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.gof.springcloud.automatedbuilder.Domain.Graph.AbstractNodeEntity;
-import com.gof.springcloud.automatedbuilder.Domain.Graph.TravelLeg.Location;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
 @NodeEntity
 public class Activity extends AbstractNodeEntity {
 
-    public Activity(){
-        this.location = new Location();
-        this.category = new Category();
-        this.cost = new Cost();
-        this.duration = new Duration();
-        this.rating = new Rating();
-        this.review = new Review();
-    }
+    private double cost;
 
-    @Relationship(type = "IS_LOCATED_IN")
-    private Location location;
+    private String category;
 
-    @Relationship(type = "CATEGORY")
-    private Category category;
+    private long seconds;
 
-    @Relationship(type = "AMOUNT_SPENT")
-    private Cost cost;
+    private int stars;
 
-    @Relationship(type = "TIME_SPENT")
-    private Duration duration;
+    private String description;
 
-    @Relationship(type = "IS_RATED")
-    private Rating rating;
-
-    @Relationship(type = "HAS_REVIEW")
-    private Review review;
+    @Relationship(type = "IS_LOCATED")
+    @JsonIgnoreProperties("activity")
+    private IsLocatedCost isLocatedCost;
 
     @Relationship(type = "IS_NEXT_TO")
-    private Activity activity;
+    @JsonIgnoreProperties({"activity", "activity1"})
+    private IsNextToCost isNextToCost;
 
-    public Activity getActivity() {
-        return activity;
-    }
-
-    public void setActivity(Activity activity) {
-        this.activity = activity;
-    }
-
-    public Location getLocation() {
-        return location;
-    }
-
-    public void setLocation(Location location) {
-        this.location = location;
-    }
-
-    public Category getCategory() {
-        return category;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
-    public Cost getCost() {
+    public double getCost() {
         return cost;
     }
 
-    public void setCost(Cost cost) {
+    public void setCost(double cost) {
         this.cost = cost;
     }
 
-    public Duration getDuration() {
-        return duration;
+    public String getCategory() {
+        return category;
     }
 
-    public void setDuration(Duration duration) {
-        this.duration = duration;
+    public void setCategory(String category) {
+        this.category = category;
     }
 
-    public Rating getRating() {
-        return rating;
+    public long getSeconds() {
+        return seconds;
     }
 
-    public void setRating(Rating rating) {
-        this.rating = rating;
+    public void setSeconds(long seconds) {
+        this.seconds = seconds;
     }
 
-    public Review getReview() {
-        return review;
+    public int getStars() {
+        return stars;
     }
 
-    public void setReview(Review review) {
-        this.review = review;
+    public void setStars(int stars) {
+        this.stars = stars;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public IsLocatedCost getIsLocatedCost() {
+        return isLocatedCost;
+    }
+
+    public void setIsLocatedCost(IsLocatedCost isLocatedCost) {
+        this.isLocatedCost = isLocatedCost;
+    }
+
+    public IsNextToCost getIsNextToCost() {
+        return isNextToCost;
+    }
+
+    public void setIsNextToCost(IsNextToCost isNextToCost) {
+        this.isNextToCost = isNextToCost;
+    }
 }
 

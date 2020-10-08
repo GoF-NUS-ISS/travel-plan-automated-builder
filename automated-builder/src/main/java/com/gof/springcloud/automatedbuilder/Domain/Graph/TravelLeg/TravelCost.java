@@ -1,55 +1,40 @@
 package com.gof.springcloud.automatedbuilder.Domain.Graph.TravelLeg;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.gof.springcloud.automatedbuilder.Domain.Graph.AbstractCostNode;
 import com.gof.springcloud.automatedbuilder.Domain.Graph.AbstractNodeEntity;
+import lombok.Data;
 import org.neo4j.ogm.annotation.EndNode;
 import org.neo4j.ogm.annotation.RelationshipEntity;
 import org.neo4j.ogm.annotation.StartNode;
 
 @RelationshipEntity(type = "TRAVELS_TO")
-public class TravelCost extends AbstractNodeEntity {
+public class TravelCost extends AbstractCostNode {
 
     @StartNode
-    private Origin startFrom;
+    @JsonIgnoreProperties("travelCost")
+    private Location startLoc;
 
     @EndNode
-    private Destination stopAt;
-
-    private long seconds;
-
-    private double cost;
+    @JsonIgnoreProperties("travelCost")
+    private Location endLoc;
 
     private String transportMode;
 
-    public Location getStartFrom() {
-        return startFrom;
+    public Location getStartLoc() {
+        return startLoc;
     }
 
-    public void setStartFrom(Origin startFrom) {
-        this.startFrom = startFrom;
+    public void setStartLoc(Location startLoc) {
+        this.startLoc = startLoc;
     }
 
-    public Location getStopAt() {
-        return stopAt;
+    public Location getEndLoc() {
+        return endLoc;
     }
 
-    public void setStopAt(Destination stopAt) {
-        this.stopAt = stopAt;
-    }
-
-    public long getSeconds() {
-        return seconds;
-    }
-
-    public void setSeconds(long seconds) {
-        this.seconds = seconds;
-    }
-
-    public double getCost() {
-        return cost;
-    }
-
-    public void setCost(double cost) {
-        this.cost = cost;
+    public void setEndLoc(Location endLoc) {
+        this.endLoc = endLoc;
     }
 
     public String getTransportMode() {
@@ -59,7 +44,4 @@ public class TravelCost extends AbstractNodeEntity {
     public void setTransportMode(String transportMode) {
         this.transportMode = transportMode;
     }
-
-
-
 }

@@ -6,6 +6,6 @@ ADD ./target/travel-automated-builder-0.0.1.jar ./travel-automated-builder-0.0.1
 
 RUN bash -c 'touch ./travel-automated-builder-0.0.1.jar'
 
-EXPOSE 8002
+EXPOSE 8003
 
 ENTRYPOINT ["java", "-jar", "./travel-automated-builder-0.0.1.jar"]
