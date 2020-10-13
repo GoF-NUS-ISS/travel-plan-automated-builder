@@ -44,4 +44,14 @@ public class TravelCost extends AbstractCostNode {
     public void setTransportMode(String transportMode) {
         this.transportMode = transportMode;
     }
+
+    @Override
+    public String toString() {
+        return "TravelCost{" +
+                "startLoc=" + startLoc.getId() +
+                ", endLoc=" + endLoc.getId() +
+                ", cost=" + this.getCost() +
+                ", transportMode='" + transportMode + '\'' +
+                '}';
+    }
 }

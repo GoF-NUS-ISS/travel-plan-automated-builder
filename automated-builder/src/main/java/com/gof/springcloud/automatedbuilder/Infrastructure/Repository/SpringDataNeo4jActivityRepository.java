@@ -36,4 +36,40 @@ public interface SpringDataNeo4jActivityRepository extends Neo4jRepository<Activ
             "WITH id(source) AS sourceNodeId, id(target) AS targetNodeId, distance WHERE source <> target\n" +
             "RETURN sourceNodeId, targetNodeId, distance")
     Iterable<Map<String, Object>> getAllPairs();
+
+    @Query("MATCH (source:Activity) WHERE id(source)=$sourceId\n" +
+            "MATCH (target:Activity) WHERE id(target)=$targetId\n" +
+            "CALL gds.alpha.shortestPath.stream({\n" +
+            "  nodeProjection: ['Activity', 'Location'],\n" +
+            "  relationshipProjection: {\n" +
+            "    IS_NEXT_TO: {\n" +
+            "      type: 'IS_NEXT_TO',\n" +
+            "      properties: 'cost',\n" +
+            "      orientation: 'UNDIRECTED'\n" +
+            "    },\n" +
+            "    HAS_ACTIVITY: {\n" +
+            "      type: 'HAS_ACTIVITY',\n" +
+            "      properties: 'cost',\n" +
+            "      orientation: 'UNDIRECTED'\n" +
+            "    },\n" +
+            "    IS_LOCATED: {\n" +
+            "      type: 'IS_LOCATED',\n" +
+            "      properties: 'cost',\n" +
+            "      orientation: 'UNDIRECTED'\n" +
+            "    },\n" +
+            "    TRAVELS_TO: {\n" +
+            "      type: 'TRAVELS_TO',\n" +
+            "      properties: 'cost',\n" +
+            "      orientation: 'UNDIRECTED'\n" +
+            "    }\n" +
+            "  },\n" +
+            "  startNode: source,\n" +
+            "  endNode: target,\n" +
+            "  relationshipWeightProperty: 'cost'\n" +
+            "})\n" +
+            "YIELD nodeId, cost\n" +
+            "WITH nodeId, cost\n" +
+            "MATCH (n)-[r]-(p) WHERE id(n)=nodeId\n" +
+            "RETURN n, r")
+    Iterable<Map<String, Object>> getPath(Long sourceId, Long targetId);
 }

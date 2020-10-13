@@ -24,14 +24,13 @@ public class GeneratePlanService implements IGeneratePlanService {
     }
 
     @Override
-    public List<Activity> GeneratePlan(QueryBody body) {
-        List<Activity> activityList = repository.SavePlanAsGraph(body);
-        log.info("GeneratePlan Output: {}", activityList);
-        return activityList;
+    public List<AbstractNodeEntity> GeneratePlan(QueryBody body) {
+        List<AbstractNodeEntity> entityList = repository.GeneratePlan(body);
+        return entityList;
     }
 
     @Override
     public void triggerAllPairs() {
-        repository.triggerAllPairs();
+        repository.trigger();
     }
 }

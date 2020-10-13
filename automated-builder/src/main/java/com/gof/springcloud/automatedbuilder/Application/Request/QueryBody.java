@@ -24,6 +24,8 @@ public class QueryBody {
     private String category;
     @ApiModelProperty(value = "description")
     private String description;
+    @ApiModelProperty(value = "totalCost")
+    private int totalCost;
 
 }
 

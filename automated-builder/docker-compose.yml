@@ -9,6 +9,8 @@ services:
       - "8003:8003"
     volumes:
       - ./log:/log
+    depends_on:
+      - neo4j
 
   neo4j:
     image: neo4j:4.0.4

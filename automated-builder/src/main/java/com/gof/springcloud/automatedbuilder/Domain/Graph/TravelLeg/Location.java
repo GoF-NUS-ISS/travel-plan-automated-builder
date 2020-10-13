@@ -42,4 +42,14 @@ public class Location extends AbstractNodeEntity {
     public void setTravelCost(TravelCost travelCost) {
         this.travelCost = travelCost;
     }
+
+    @Override
+    public String toString() {
+        return "Location{" +
+                "ID='" + this.getId() + '\'' +
+                "location='" + location + '\'' +
+                ", hasActivityCost=" + hasActivityCost +
+                ", travelCost=" + travelCost +
+                '}';
+    }
 }

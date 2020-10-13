@@ -9,6 +9,17 @@ import org.neo4j.ogm.annotation.Relationship;
 
 @NodeEntity
 public class Activity extends AbstractNodeEntity {
+    @Override
+    public String toString() {
+        return "Activity{" +
+                "ID='" + this.getId() + '\'' +
+                "cost=" + cost +
+                ", category='" + category + '\'' +
+                ", seconds=" + seconds +
+                ", stars=" + stars +
+                ", description='" + description + '\'' +
+                '}';
+    }
 
     private double cost;
 

@@ -10,7 +10,7 @@ public interface IGeneratePlanService {
 
     void SavePlanAsGraph(AbstractNodeEntity entity);
 
-    List<Activity> GeneratePlan(QueryBody body);
+    List<AbstractNodeEntity> GeneratePlan(QueryBody body);
 
     void triggerAllPairs();
 }

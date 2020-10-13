@@ -9,7 +9,7 @@ import java.util.List;
 public interface IGeneratePlanRepository {
     void Save(AbstractNodeEntity entity);
 
-    List<Activity> SavePlanAsGraph(QueryBody body);
+    List<AbstractNodeEntity> GeneratePlan(QueryBody body);
 
-    void triggerAllPairs();
+    void trigger();
 }

@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 @Api("Automated Plan Builder API")
 @RestController
@@ -44,7 +45,19 @@ public class GeneratePlanController {
     @ApiOperation(value = "Generate Plan")
     public ResponseEntity generatePlan(@RequestBody QueryBody queryBody){
         log.info("querybody: {}",queryBody);
-        return ResponseEntity.status(HttpStatus.OK).body(generatePlanService.GeneratePlan(queryBody));
+        List<AbstractNodeEntity> entityList = generatePlanService.GeneratePlan(queryBody);
+        log.info("Convert graph to model");
+        TravelPlanModel travelPlanModel = convertToModel(entityList);
+        log.info("Return model: {}", travelPlanModel);
+        return ResponseEntity.status(HttpStatus.OK).body(travelPlanModel);
+    }
+
+    private TravelPlanModel convertToModel(List<AbstractNodeEntity> entityList) {
+        TravelPlanModel travelPlanModel = new TravelPlanModel();
+
+
+
+        return travelPlanModel;
     }
 
     @PostMapping("/addPlanAsGraph")
