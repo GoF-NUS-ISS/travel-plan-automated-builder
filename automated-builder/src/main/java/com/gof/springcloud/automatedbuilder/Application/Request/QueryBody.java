@@ -24,8 +24,16 @@ public class QueryBody {
     private String category;
     @ApiModelProperty(value = "description")
     private String description;
-    @ApiModelProperty(value = "totalCost")
-    private int totalCost;
+    @ApiModelProperty(value = "startCost")
+    private int startCost;
+    @ApiModelProperty(value = "endCost")
+    private int endCost;
 
+    public boolean validate(){
+        return this.getStartCost()<=this.getEndCost() &&
+                !this.getCategory().isEmpty() &&
+                !this.getDescription().isEmpty() &&
+                this.getStars() != 0;
+    }
 }
 

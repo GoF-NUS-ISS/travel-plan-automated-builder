@@ -41,7 +41,7 @@ public class Neo4JDbGeneratePlanRepository implements IGeneratePlanRepository {
     public List<AbstractNodeEntity> GeneratePlan(QueryBody body) {
         List<Activity> activityList = activityRepository.getActivitiesByRank(body.getCategory(), body.getDescription(), body.getStars());
 
-        List<AbstractNodeEntity> entities = generatePlanFromActivityList(activityList, body.getTotalCost());
+        List<AbstractNodeEntity> entities = generatePlanFromActivityList(activityList, body.getStartCost(), body.getEndCost());
         log.info("Generated entity list: {}", entities);
         return entities;
     }
@@ -52,15 +52,16 @@ public class Neo4JDbGeneratePlanRepository implements IGeneratePlanRepository {
         body.setCategory("food");
         body.setDescription("soup");
         body.setStars(4);
-        body.setTotalCost(2000);
+        body.setStartCost(10000);
+        body.setEndCost(20000);
         List<Activity> activityList = activityRepository.getActivitiesByRank(body.getCategory(), body.getDescription(), body.getStars());
 
-        List<AbstractNodeEntity> entities = generatePlanFromActivityList(activityList, body.getTotalCost());
+        List<AbstractNodeEntity> entities = generatePlanFromActivityList(activityList, body.getStartCost(), body.getEndCost());
         log.info("Generated entity list: {}", entities);
 
     }
 
-    private List<AbstractNodeEntity> generatePlanFromActivityList(List<Activity> activityList, int totalCost) {
+    private List<AbstractNodeEntity> generatePlanFromActivityList(List<Activity> activityList, int startCost, int endCost) {
         List<AbstractNodeEntity> entityList = new ArrayList<>();
 
         Map<Long, Map<Long, Double>> allPairCombinations = convert(activityRepository.getAllPairs());
@@ -69,7 +70,7 @@ public class Neo4JDbGeneratePlanRepository implements IGeneratePlanRepository {
         Map<Long, Long> sourceDistMap = new HashMap<>();
         int currCost=0;
         int i=1;
-        while(currCost<=totalCost && i<activityList.size()){
+        while(currCost<=endCost && i<activityList.size()){
             Long sourceId = activityList.get(i-1).getId();
             Long targetId = activityList.get(i).getId();
             log.info("sourceId: {}", sourceId);
@@ -83,58 +84,58 @@ public class Neo4JDbGeneratePlanRepository implements IGeneratePlanRepository {
             i++;
         }
         log.info("currCost: {}", currCost);
-        log.info("sourceDistMap: {}", sourceDistMap);
+        if(currCost<startCost){
+            log.info("Unable to fulfill start cost");
+        }
+        else {
+            log.info("sourceDistMap: {}", sourceDistMap);
 
-        sourceDistMap.keySet().forEach(s ->{
-            Long tgt=sourceDistMap.get(s);
-            log.info("Get path from node id {} to id {}", s, tgt);
-            Iterable<Map<String, Object>> path = activityRepository.getPath(s, tgt);
-            path.forEach(indivMap -> {
-                log.info("indiv map: {}", indivMap);
-                AbstractNodeEntity entity = (AbstractNodeEntity) indivMap.get("n");
-                if(entityList.isEmpty()){
-                    entityList.add(entity);
-                }
-                AbstractNodeEntity lastElem = entityList.get(entityList.size()-1);
-                log.info("lastElem: {}", lastElem);
-                log.info("entity: {}", entity);
+            sourceDistMap.keySet().forEach(s ->{
+                Long tgt=sourceDistMap.get(s);
+                log.info("Get path from node id {} to id {}", s, tgt);
+                Iterable<Map<String, Object>> path = activityRepository.getPath(s, tgt);
+                path.forEach(indivMap -> {
+                    log.info("indiv map: {}", indivMap);
+                    AbstractNodeEntity entity = (AbstractNodeEntity) indivMap.get("n");
+                    if(entityList.isEmpty()){
+                        entityList.add(entity);
+                    }
+                    AbstractNodeEntity lastElem = entityList.get(entityList.size()-1);
 
-                if(!lastElem.getId().equals(entity.getId())){
-                    if(!(entity instanceof Location && lastElem instanceof Location)){
-                        if(lastElem instanceof TravelCost){
-                            TravelCost cost = (TravelCost) lastElem;
-                            if(!((TravelCost) lastElem).getEndLoc().getId().equals(entity.getId())){
-                                log.info("Passed travel cost check. Adding entity {}", entity);
+                    if(!lastElem.getId().equals(entity.getId())){
+                        if(!(entity instanceof Location && lastElem instanceof Location)){
+                            if(lastElem instanceof TravelCost){
+                                TravelCost cost = (TravelCost) lastElem;
+                                if(!((TravelCost) lastElem).getEndLoc().getId().equals(entity.getId())){
+                                    entityList.add(entity);
+                                }
+                            }
+                            else{
                                 entityList.add(entity);
                             }
                         }
-                        else{
-                            log.info("Adding entity {}", entity);
-                            entityList.add(entity);
+                        else if(indivMap.get("r") instanceof TravelCost){
+                            Location start = (Location) lastElem;
+                            Location end = (Location) entity;
+                            TravelCost cost = (TravelCost)indivMap.get("r");
+
+                            //fix bug for where cost refer to same object
+                            TravelCost newCost = new TravelCost();
+                            newCost.setId(cost.getId());
+                            newCost.setSeconds(cost.getSeconds());
+                            newCost.setCost(cost.getCost());
+                            newCost.setTransportMode(cost.getTransportMode());
+                            newCost.setStartLoc(start);
+                            newCost.setEndLoc(end);
+
+                            entityList.remove(start);
+                            entityList.add(newCost);
                         }
+
                     }
-                    else if(indivMap.get("r") instanceof TravelCost){
-                        Location start = (Location) lastElem;
-                        Location end = (Location) entity;
-                        TravelCost cost = (TravelCost)indivMap.get("r");
-
-                        //fix bug for where cost refer to same object
-                        TravelCost newCost = new TravelCost();
-                        newCost.setId(cost.getId());
-                        newCost.setSeconds(cost.getSeconds());
-                        newCost.setCost(cost.getCost());
-                        newCost.setTransportMode(cost.getTransportMode());
-                        newCost.setStartLoc(start);
-                        newCost.setEndLoc(end);
-
-                        log.info("Adding travel cost {}", newCost);
-                        entityList.remove(start);
-                        entityList.add(newCost);
-                    }
-
-                }
+                });
             });
-        });
+        }
 
         return entityList;
     }

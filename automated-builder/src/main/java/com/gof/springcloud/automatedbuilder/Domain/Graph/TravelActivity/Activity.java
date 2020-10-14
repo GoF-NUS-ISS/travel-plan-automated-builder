@@ -18,8 +18,11 @@ public class Activity extends AbstractNodeEntity {
                 ", seconds=" + seconds +
                 ", stars=" + stars +
                 ", description='" + description + '\'' +
+                ", location='" + location + '\'' +
                 '}';
     }
+
+    private String location;
 
     private double cost;
 
@@ -38,6 +41,14 @@ public class Activity extends AbstractNodeEntity {
     @Relationship(type = "IS_NEXT_TO")
     @JsonIgnoreProperties({"activity", "activity1"})
     private IsNextToCost isNextToCost;
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
 
     public double getCost() {
         return cost;
