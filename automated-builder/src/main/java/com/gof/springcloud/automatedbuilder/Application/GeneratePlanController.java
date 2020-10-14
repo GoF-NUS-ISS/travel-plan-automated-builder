@@ -38,13 +38,6 @@ public class GeneratePlanController {
         this.generatePlanService = generatePlanService;
     }
 
-    @GetMapping("triggerAllPairs")
-    @ApiOperation(value="trigger")
-    public ResponseEntity trigger(){
-        generatePlanService.triggerAllPairs();
-        return ResponseEntity.status(HttpStatus.OK).build();
-    }
-
     @PostMapping("/generatePlan")
     @ApiOperation(value = "Generate Plan")
     public ResponseEntity generatePlan(@RequestBody QueryBody queryBody){

@@ -46,21 +46,6 @@ public class Neo4JDbGeneratePlanRepository implements IGeneratePlanRepository {
         return entities;
     }
 
-    @Override
-    public void trigger() {
-        QueryBody body = new QueryBody();
-        body.setCategory("food");
-        body.setDescription("soup");
-        body.setStars(4);
-        body.setStartCost(10000);
-        body.setEndCost(20000);
-        List<Activity> activityList = activityRepository.getActivitiesByRank(body.getCategory(), body.getDescription(), body.getStars());
-
-        List<AbstractNodeEntity> entities = generatePlanFromActivityList(activityList, body.getStartCost(), body.getEndCost());
-        log.info("Generated entity list: {}", entities);
-
-    }
-
     private List<AbstractNodeEntity> generatePlanFromActivityList(List<Activity> activityList, int startCost, int endCost) {
         List<AbstractNodeEntity> entityList = new ArrayList<>();
 

@@ -10,6 +10,4 @@ public interface IGeneratePlanRepository {
     void Save(AbstractNodeEntity entity);
 
     List<AbstractNodeEntity> GeneratePlan(QueryBody body);
-
-    void trigger();
 }

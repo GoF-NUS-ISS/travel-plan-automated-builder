@@ -28,9 +28,4 @@ public class GeneratePlanService implements IGeneratePlanService {
         List<AbstractNodeEntity> entityList = repository.GeneratePlan(body);
         return entityList;
     }
-
-    @Override
-    public void triggerAllPairs() {
-        repository.trigger();
-    }
 }

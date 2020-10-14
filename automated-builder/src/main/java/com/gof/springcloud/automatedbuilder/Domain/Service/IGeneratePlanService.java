@@ -11,6 +11,4 @@ public interface IGeneratePlanService {
     void SavePlanAsGraph(AbstractNodeEntity entity);
 
     List<AbstractNodeEntity> GeneratePlan(QueryBody body);
-
-    void triggerAllPairs();
 }
