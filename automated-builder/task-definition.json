@@ -1,0 +1,65 @@
+{
+  "containerDefinitions": [
+    {
+      "essential": true,
+      "name": "travel-plan-automated-builder",
+      "image": "",
+      "portMappings": [
+        {
+          "containerPort": 8003,
+          "hostPort": 8003,
+          "protocol": "tcp"
+        }
+      ],
+      "mountPoints": [
+        {
+          "containerPath": "/log",
+          "sourceVolume": "efs-volume"
+        }
+      ],
+      "logConfiguration":{
+        "logDriver":"awslogs",
+        "options":{
+          "awslogs-group":"ecs/travel-app-log-grp-main-app",
+          "awslogs-region":"us-east-1",
+          "awslogs-stream-prefix":"travel-plan-automated-builder-main"
+        }
+      }
+    },
+    {
+      "essential": true,
+      "name": "neo4j",
+      "image": "docker.io/neo4j:4.0.4",
+      "portMappings": [
+        {
+          "containerPort": 7474,
+          "hostPort": 7474,
+          "protocol": "http"
+        },
+        {
+          "containerPort": 7687,
+          "hostPort": 7687,
+          "protocol": "bolt"
+        }
+      ]
+    }
+  ],
+
+  "cpu": "1024",
+  "executionRoleArn": "arn:aws:iam::356567610291:role/ecsTaskExecutionRole",
+  "family": "task-def-travel-automated-builder-api-main",
+  "memory": "4096",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": [
+    "FARGATE"
+  ],
+  "volumes": [
+    {
+      "name": "efs-volume",
+      "efsVolumeConfiguration": {
+        "fileSystemId": "fs-c2633f40",
+        "transitEncryption": "ENABLED"
+      }
+    }
+  ]
+}
