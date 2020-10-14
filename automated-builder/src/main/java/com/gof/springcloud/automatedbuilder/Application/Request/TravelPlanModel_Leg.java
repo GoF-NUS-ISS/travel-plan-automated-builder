@@ -26,8 +26,8 @@ public class TravelPlanModel_Leg extends TravelPlanModel_DayNode {
     @ApiModelProperty(value = "start on")
     public LocalDateTime startOn;
 
-    @ApiModelProperty(value = "return date")
-    public LocalDateTime returnDate;
+    @ApiModelProperty(value = "stop at")
+    public LocalDateTime stopAt;
 
     @ApiModelProperty(value = "transport mode")
     public String transportMode;

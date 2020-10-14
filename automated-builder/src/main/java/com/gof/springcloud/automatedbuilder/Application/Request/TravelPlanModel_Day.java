@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -17,9 +18,10 @@ import java.util.List;
 @Builder
 @ApiModel(value = "day")
 public class TravelPlanModel_Day {
+
     @ApiModelProperty(value = "current date")
     private LocalDateTime date;
 
     @ApiModelProperty(value = "nodes")
-    private List<TravelPlanModel_DayNode> nodes;
+    private List<TravelPlanModel_DayNode> nodes = new ArrayList<>();
 }

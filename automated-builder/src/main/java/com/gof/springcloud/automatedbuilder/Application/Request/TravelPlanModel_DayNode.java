@@ -14,4 +14,14 @@ public abstract class TravelPlanModel_DayNode {
 //    @ApiModelProperty(value = "type")
 //    private String type;
 
+    public TravelPlanModel_DayNode getNext() {
+        return next;
+    }
+
+    public void setNext(TravelPlanModel_DayNode next) {
+        this.next = next;
+    }
+
+    private TravelPlanModel_DayNode next;
+
 }

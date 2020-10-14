@@ -1,8 +1,8 @@
 package com.gof.springcloud.automatedbuilder.Infrastructure.Configuration;
 
 import com.gof.springcloud.automatedbuilder.AutomatedBuilderApplication;
-import com.gof.springcloud.automatedbuilder.Domain.Repository.ITravelRepository;
-import com.gof.springcloud.automatedbuilder.Domain.Service.QueryService;
+import com.gof.springcloud.automatedbuilder.Domain.Repository.IGeneratePlanRepository;
+import com.gof.springcloud.automatedbuilder.Domain.Service.GeneratePlanService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 public class BeanConfiguration {
 
     @Bean
-    QueryService queryService(final ITravelRepository orderRepository){
-        return new QueryService(orderRepository);
+    GeneratePlanService queryService(final IGeneratePlanRepository orderRepository){
+        return new GeneratePlanService(orderRepository);
     }
 }

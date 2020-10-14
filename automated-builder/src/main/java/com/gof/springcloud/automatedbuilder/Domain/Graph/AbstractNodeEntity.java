@@ -1,11 +1,11 @@
-package com.gof.springcloud.automatedbuilder.Domain.Graph.TravelLeg;
+package com.gof.springcloud.automatedbuilder.Domain.Graph;
 
 import org.neo4j.ogm.annotation.GeneratedValue;
 import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.NodeEntity;
 
-@NodeEntity
-public class Origin {
+public abstract class AbstractNodeEntity {
+
     @org.neo4j.ogm.annotation.Id
     @GeneratedValue
     private Long Id;
@@ -17,14 +17,4 @@ public class Origin {
     public void setId(Long id) {
         Id = id;
     }
-
-    public String getOrigin() {
-        return origin;
-    }
-
-    public void setOrigin(String origin) {
-        this.origin = origin;
-    }
-
-    private String origin;
 }

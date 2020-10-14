@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -28,6 +29,6 @@ public class TravelPlanModel {
     private String title;
 
     @ApiModelProperty(value = "days")
-    private List<TravelPlanModel_Day> days;
+    private List<TravelPlanModel_Day> days  = new ArrayList<>();
 }
 
