@@ -102,9 +102,9 @@ public class Neo4JDbGeneratePlanRepository implements IGeneratePlanRepository {
                 if(!lastElem.getId().equals(entity.getId())){
                     if(!(entity instanceof Location && lastElem instanceof Location)){
                         if(lastElem instanceof TravelCost){
-                            AbstractNodeEntity secondLast = entityList.get(entityList.size()-2);
-                            if(!secondLast.getId().equals(entity.getId())){
-                                log.info("Adding entity {}", entity);
+                            TravelCost cost = (TravelCost) lastElem;
+                            if(!((TravelCost) lastElem).getEndLoc().getId().equals(entity.getId())){
+                                log.info("Passed travel cost check. Adding entity {}", entity);
                                 entityList.add(entity);
                             }
                         }
@@ -114,11 +114,22 @@ public class Neo4JDbGeneratePlanRepository implements IGeneratePlanRepository {
                         }
                     }
                     else if(indivMap.get("r") instanceof TravelCost){
-                        log.info("Adding location {}", entity);
-                        entityList.add(entity);
+                        Location start = (Location) lastElem;
+                        Location end = (Location) entity;
                         TravelCost cost = (TravelCost)indivMap.get("r");
-                        log.info("Add travel cost: {}", cost);
-                        entityList.add(cost);
+
+                        //fix bug for where cost refer to same object
+                        TravelCost newCost = new TravelCost();
+                        newCost.setId(cost.getId());
+                        newCost.setSeconds(cost.getSeconds());
+                        newCost.setCost(cost.getCost());
+                        newCost.setTransportMode(cost.getTransportMode());
+                        newCost.setStartLoc(start);
+                        newCost.setEndLoc(end);
+
+                        log.info("Adding travel cost {}", newCost);
+                        entityList.remove(start);
+                        entityList.add(newCost);
                     }
 
                 }
