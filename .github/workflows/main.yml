@@ -63,7 +63,7 @@ jobs:
         id: task-def-travel-plan-automated-builder
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
-          task-definition: task-definition.json
+          task-definition: automated-builder/task-definition.json
           container-name: travel-plan-automated-builder
           image: docker.io/gofnusiss/travel-plan-automated-builder:${{ github.sha }}
 
