@@ -33,4 +33,12 @@ public class HasActivityCost extends AbstractCostNode {
     public void setLocation(Location location) {
         this.location = location;
     }
+
+    @Override
+    public String toString() {
+        return "HasActivityCost{" +
+                "activity=" + activity.getId() +
+                ", location=" + location.getId() +
+                '}';
+    }
 }

@@ -2,7 +2,11 @@ package com.gof.springcloud.automatedbuilder.Infrastructure.Repository;
 
 import com.gof.springcloud.automatedbuilder.Application.Request.QueryBody;
 import com.gof.springcloud.automatedbuilder.Domain.Graph.AbstractNodeEntity;
+import com.gof.springcloud.automatedbuilder.Domain.Graph.AbstractNodeEntityLinkedList;
 import com.gof.springcloud.automatedbuilder.Domain.Graph.TravelActivity.Activity;
+import com.gof.springcloud.automatedbuilder.Domain.Graph.TravelActivity.HasActivityCost;
+import com.gof.springcloud.automatedbuilder.Domain.Graph.TravelActivity.IsLocatedCost;
+import com.gof.springcloud.automatedbuilder.Domain.Graph.TravelActivity.IsNextToCost;
 import com.gof.springcloud.automatedbuilder.Domain.Graph.TravelLeg.Location;
 import com.gof.springcloud.automatedbuilder.Domain.Graph.TravelLeg.TravelCost;
 import com.gof.springcloud.automatedbuilder.Domain.Repository.IGeneratePlanRepository;
@@ -23,18 +27,134 @@ import java.util.Map;
 @Slf4j
 public class Neo4JDbGeneratePlanRepository implements IGeneratePlanRepository {
 
-    private final SpringDataNeo4jRepository repository;
+    private final SpringDataNeo4jRepository neo4jRepository;
     private final SpringDataNeo4jActivityRepository activityRepository;
+    private final SpringDataNeo4jLocationRepository locationRepository;
 
     @Autowired
-    public Neo4JDbGeneratePlanRepository(final SpringDataNeo4jRepository springDataNeo4JActivityRepository, final SpringDataNeo4jActivityRepository activityRepository){
-        this.repository = springDataNeo4JActivityRepository;
+    public Neo4JDbGeneratePlanRepository(final SpringDataNeo4jRepository springDataNeo4JActivityRepository,
+                                         final SpringDataNeo4jActivityRepository activityRepository,
+                                         final SpringDataNeo4jLocationRepository locationRepository){
+        this.neo4jRepository = springDataNeo4JActivityRepository;
         this.activityRepository = activityRepository;
+        this.locationRepository = locationRepository;
     }
 
     @Override
-    public void Save(AbstractNodeEntity entity){
-        repository.save(entity);
+    public void Save(AbstractNodeEntity entity, AbstractNodeEntityLinkedList linkedListNode){
+        List<AbstractNodeEntity> entityList = new ArrayList<>();
+        boolean matchFound = false;
+        while(linkedListNode != null){
+            AbstractNodeEntity abstractNodeEntity = linkedListNode.getAbstractNodeEntity();
+            if(abstractNodeEntity instanceof Location){
+                Location newLocation = ((Location) abstractNodeEntity);
+                List<Location> currLocationInDBList = locationRepository.findLocationByString(newLocation.getLocation());
+                if (!currLocationInDBList.isEmpty()){
+                    Location currLocationInDB = currLocationInDBList.get(0);
+                    matchFound = true;
+                    log.info("current location {} found", newLocation.getLocation());
+                    //move outgoing edge to current node
+                    updateLocationOutgoingNodes(currLocationInDB, newLocation);
+
+                    //point incoming edge to current node
+                    updateLocationIncomingNodes(currLocationInDB, linkedListNode.getPrev());
+                    updateLocationIncomingNodes(currLocationInDB, linkedListNode.getNext());
+
+                    entityList.add(currLocationInDB);
+                }
+            }
+            if(abstractNodeEntity instanceof Activity){
+                Activity newActivity = ((Activity) abstractNodeEntity);
+                List<Activity> activityList = activityRepository.findActivityByString(newActivity.getCategory(), newActivity.getDescription(), newActivity.getCost(), newActivity.getSeconds(), newActivity.getStars());
+                if(!activityList.isEmpty()){
+                    Activity currActivityInDB = activityList.get(0);
+                    matchFound = true;
+                    log.info("current activity {} found", currActivityInDB);
+                    //move outgoing edge to current node
+                    updateActivityOutgoingNodes(currActivityInDB, newActivity);
+
+                    //point incoming edge to current node
+                    updateActivityIncomingNodes(currActivityInDB, linkedListNode.getPrev());
+                    updateActivityIncomingNodes(currActivityInDB, linkedListNode.getNext());
+
+                    entityList.add(currActivityInDB);
+                }
+
+            }
+            linkedListNode = linkedListNode.getPrev();
+        }
+        if (matchFound) {
+            neo4jRepository.saveAll(entityList);
+        } else {
+            neo4jRepository.save(entity);
+        }
+    }
+
+    private void updateActivityOutgoingNodes(Activity currActivityInDB, Activity newActivity) {
+        List<IsNextToCost> currNextToCostList = currActivityInDB.getIsNextToCost();
+        if(currNextToCostList == null){
+            currNextToCostList = new ArrayList<>();
+        }
+        IsNextToCost isNextToCost = newActivity.getIsNextToCost().get(0);
+        isNextToCost.setActivity1(currActivityInDB);
+        currNextToCostList.add(isNextToCost);
+        currActivityInDB.setIsNextToCost(currNextToCostList);
+
+        List<IsLocatedCost> isLocatedCostList = currActivityInDB.getIsLocatedCost();
+        if(isLocatedCostList == null){
+            isLocatedCostList = new ArrayList<>();
+        }
+        IsLocatedCost isLocatedCost = newActivity.getIsLocatedCost().get(0);
+        isLocatedCost.setActivity(currActivityInDB);
+        isLocatedCostList.add(isLocatedCost);
+        currActivityInDB.setIsLocatedCost(isLocatedCostList);
+
+    }
+
+    private void updateActivityIncomingNodes(Activity currActivityInDB, AbstractNodeEntityLinkedList linkedListNode) {
+        if (linkedListNode != null){
+            AbstractNodeEntity entity = linkedListNode.getAbstractNodeEntity();
+            if(entity instanceof Activity){
+                List<IsNextToCost> isNextToCostList = ((Activity) entity).getIsNextToCost();
+                isNextToCostList.get(0).setActivity(currActivityInDB);
+            }
+            if(entity instanceof Location){
+                List<HasActivityCost> hasActivityCostList = ((Location) entity).getHasActivityCost();
+                hasActivityCostList.get(0).setActivity(currActivityInDB);
+            }
+        }
+    }
+
+    private void updateLocationOutgoingNodes(Location currLocationInDB, Location newLocation) {
+        List<HasActivityCost> currActCostList = currLocationInDB.getHasActivityCost();
+        if(currActCostList == null){
+            currActCostList = new ArrayList<>();
+        }
+        HasActivityCost newActCost = newLocation.getHasActivityCost().get(0);
+        newActCost.setLocation(currLocationInDB);
+        currActCostList.add(newActCost);
+        currLocationInDB.setHasActivityCost(currActCostList);
+
+        List<TravelCost> currTravelCostList = currLocationInDB.getTravelCost();
+        if(currTravelCostList == null){
+            currTravelCostList = new ArrayList<>();
+        }
+        currTravelCostList.add(newLocation.getTravelCost().get(0));
+        currLocationInDB.setTravelCost(currTravelCostList);
+    }
+
+    private void updateLocationIncomingNodes(Location currLocationInDB, AbstractNodeEntityLinkedList linkedListNode) {
+        if (linkedListNode != null){
+            AbstractNodeEntity entity = linkedListNode.getAbstractNodeEntity();
+            if(entity instanceof Activity){
+                List<IsLocatedCost> isLocatedCostList = ((Activity) entity).getIsLocatedCost();
+                isLocatedCostList.get(0).setLocation(currLocationInDB);
+            }
+            if(entity instanceof Location){
+                List<TravelCost> travelCostList = ((Location) entity).getTravelCost();
+                travelCostList.get(0).setStartLoc(currLocationInDB);
+            }
+        }
     }
 
     @Override
