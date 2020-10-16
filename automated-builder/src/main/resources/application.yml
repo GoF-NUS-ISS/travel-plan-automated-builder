@@ -1,6 +1,7 @@
 server:
   port: 8003
 
+
 logging:
   file:
     name: ./log/travel-plan-builder.log
@@ -12,6 +13,11 @@ spring:
       uri: bolt://neo4j:7687
   application:
     name: microservicecloud-travel-builder
+    setting:
+      dayduration: 8
+      hrsPastMidnight: 8
+      timeZone: Asia/Shanghai
+      dateFormat: dd/MM/yyyy HH:mm
 
 info:
   app.name: gof-microservicecloud

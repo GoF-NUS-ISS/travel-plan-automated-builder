@@ -3,9 +3,10 @@ package com.gof.springcloud.automatedbuilder.Domain.Graph.TravelLeg;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.gof.springcloud.automatedbuilder.Domain.Graph.AbstractNodeEntity;
 import com.gof.springcloud.automatedbuilder.Domain.Graph.TravelActivity.HasActivityCost;
-import lombok.Data;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
+
+import java.util.List;
 
 @NodeEntity
 public class Location extends AbstractNodeEntity {
@@ -13,11 +14,11 @@ public class Location extends AbstractNodeEntity {
 
     @Relationship(type = "HAS_ACTIVITY")
     @JsonIgnoreProperties("location")
-    private HasActivityCost hasActivityCost;
+    private List<HasActivityCost> hasActivityCost;
 
     @Relationship(type = "TRAVELS_TO")
     @JsonIgnoreProperties({"startLoc", "endLoc"})
-    private TravelCost travelCost;
+    private List<TravelCost> travelCost;
 
     public String getLocation() {
         return location;
@@ -27,19 +28,19 @@ public class Location extends AbstractNodeEntity {
         this.location = location;
     }
 
-    public HasActivityCost getHasActivityCost() {
+    public List<HasActivityCost> getHasActivityCost() {
         return hasActivityCost;
     }
 
-    public void setHasActivityCost(HasActivityCost hasActivityCost) {
+    public void setHasActivityCost(List<HasActivityCost> hasActivityCost) {
         this.hasActivityCost = hasActivityCost;
     }
 
-    public TravelCost getTravelCost() {
+    public List<TravelCost> getTravelCost() {
         return travelCost;
     }
 
-    public void setTravelCost(TravelCost travelCost) {
+    public void setTravelCost(List<TravelCost> travelCost) {
         this.travelCost = travelCost;
     }
 

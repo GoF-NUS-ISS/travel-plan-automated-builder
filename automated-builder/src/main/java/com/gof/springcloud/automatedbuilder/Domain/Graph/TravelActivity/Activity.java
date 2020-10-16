@@ -2,10 +2,10 @@ package com.gof.springcloud.automatedbuilder.Domain.Graph.TravelActivity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.gof.springcloud.automatedbuilder.Domain.Graph.AbstractNodeEntity;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
+
+import java.util.List;
 
 @NodeEntity
 public class Activity extends AbstractNodeEntity {
@@ -36,11 +36,11 @@ public class Activity extends AbstractNodeEntity {
 
     @Relationship(type = "IS_LOCATED")
     @JsonIgnoreProperties("activity")
-    private IsLocatedCost isLocatedCost;
+    private List<IsLocatedCost> isLocatedCost;
 
     @Relationship(type = "IS_NEXT_TO")
     @JsonIgnoreProperties({"activity", "activity1"})
-    private IsNextToCost isNextToCost;
+    private List<IsNextToCost> isNextToCost;
 
     public String getLocation() {
         return location;
@@ -90,19 +90,19 @@ public class Activity extends AbstractNodeEntity {
         this.description = description;
     }
 
-    public IsLocatedCost getIsLocatedCost() {
+    public List<IsLocatedCost> getIsLocatedCost() {
         return isLocatedCost;
     }
 
-    public void setIsLocatedCost(IsLocatedCost isLocatedCost) {
+    public void setIsLocatedCost(List<IsLocatedCost> isLocatedCost) {
         this.isLocatedCost = isLocatedCost;
     }
 
-    public IsNextToCost getIsNextToCost() {
+    public List<IsNextToCost> getIsNextToCost() {
         return isNextToCost;
     }
 
-    public void setIsNextToCost(IsNextToCost isNextToCost) {
+    public void setIsNextToCost(List<IsNextToCost> isNextToCost) {
         this.isNextToCost = isNextToCost;
     }
 }
