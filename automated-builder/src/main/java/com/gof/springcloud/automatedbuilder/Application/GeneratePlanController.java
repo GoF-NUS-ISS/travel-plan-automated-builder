@@ -14,6 +14,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +31,18 @@ import java.util.List;
 @RequestMapping("/")
 @Slf4j
 public class GeneratePlanController {
+
+    @Value("${spring.application.setting.dayduration}")
+    private int dayDuration;
+
+    @Value("${spring.application.setting.hrspastmidnight}")
+    private int hrsPastMidnight;
+
+    @Value("${spring.application.setting.timezone}")
+    private String timeZone;
+
+    @Value("${spring.application.setting.dateformat}")
+    private String dateFormat;
 
     private final IGeneratePlanService generatePlanService;
 
@@ -55,8 +68,8 @@ public class GeneratePlanController {
     private TravelPlanModel convertToModel(List<AbstractNodeEntity> entityList) {
         TravelPlanModel travelPlanModel = new TravelPlanModel();
 
-        ZoneId zoneId = ZoneId.of("Asia/Shanghai");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        ZoneId zoneId = ZoneId.of(timeZone);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(dateFormat);
         LocalDateTime currDateTime = LocalDateTime.now(zoneId);
         if(entityList.isEmpty()){
             log.info("entityList empty");
@@ -69,8 +82,7 @@ public class GeneratePlanController {
             travelPlanModel.setTitle(nameTitle);
         }
 
-        int dayDuration=3;
-        LocalDateTime start = LocalDateTime.of(currDateTime.toLocalDate(), currDateTime.toLocalTime()).toLocalDate().atStartOfDay().plusHours(8);
+        LocalDateTime start = LocalDateTime.of(currDateTime.toLocalDate(), currDateTime.toLocalTime()).toLocalDate().atStartOfDay().plusHours(hrsPastMidnight);
         LocalDateTime end = LocalDateTime.of(start.toLocalDate(), start.toLocalTime());
         LocalDateTime endOfDay = start.plusHours(dayDuration);
 
@@ -109,7 +121,7 @@ public class GeneratePlanController {
             if(!end.isBefore(endOfDay)){
                 travelPlanModel.getDays().add(day);
                 endOfDay = endOfDay.plusDays(1);
-                start = endOfDay.toLocalDate().atStartOfDay().plusHours(8);
+                start = endOfDay.toLocalDate().atStartOfDay().plusHours(hrsPastMidnight);
                 day = new TravelPlanModel_Day();
                 log.info("new day");
                 log.info("day starts at: {}", start);
