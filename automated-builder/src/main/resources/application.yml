@@ -1,20 +1,23 @@
 server:
-  port: 8002
+  port: 8003
+
 
 logging:
   file:
     name: ./log/travel-plan-builder.log
 spring:
+  data:
+    neo4j:
+      username: neo4j
+      password: neo4j
+      uri: bolt://neo4j:7687
   application:
     name: microservicecloud-travel-builder
-
-eureka:
-  client: #client register into eureka
-    service-url:
-      defaultZone: http://eureka1:7001/eureka/
-  instance:
-    instance-id: microservicecloud-travel-builder8002
-    prefer-ip-address: true
+    setting:
+      dayduration: 8
+      hrsPastMidnight: 8
+      timeZone: Asia/Shanghai
+      dateFormat: dd/MM/yyyy HH:mm
 
 info:
   app.name: gof-microservicecloud

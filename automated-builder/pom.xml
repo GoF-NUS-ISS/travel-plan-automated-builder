@@ -9,33 +9,156 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.gof.springcloud</groupId>
-	<artifactId>automated-builder</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<artifactId>travel-automated-builder</artifactId>
+	<version>0.0.1</version>
 	<name>automated-builder</name>
 	<description>Automated Travel Plan Builder</description>
 
 	<properties>
 		<java.version>1.8</java.version>
 		<spring-cloud.version>Hoxton.SR8</spring-cloud.version>
+		<version.number>${git.commit.id}</version.number>
 	</properties>
+
+	<profiles>
+		<profile>
+			<id>sonar</id>
+			<properties>
+				<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+				<sonar.organization>gof-nus-iss</sonar.organization>
+				<sonar.projectKey>GoF-NUS-ISS_travel-plan-api</sonar.projectKey>
+				<sonar.moduleKey>${project.groupId}:${project.artifactId}</sonar.moduleKey>
+			</properties>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.sonarsource.scanner.maven</groupId>
+						<artifactId>sonar-maven-plugin</artifactId>
+						<version>3.7.0.1746</version>
+						<executions>
+							<execution>
+								<phase>verify</phase>
+								<goals>
+									<goal>sonar</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>staging</id>
+
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>pl.project13.maven</groupId>
+						<artifactId>git-commit-id-plugin</artifactId>
+						<version>2.2.4</version>
+						<executions>
+							<execution>
+								<phase>validate</phase>
+								<goals>
+									<goal>revision</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<dateFormat>yyyyMMdd-HHmmss</dateFormat><!--  human-readable part of the version number -->
+							<dotGitDirectory>${project.basedir}/.git</dotGitDirectory>
+							<generateGitPropertiesFile>true</generateGitPropertiesFile>
+							<generateGitPropertiesFilename>${project.basedir}/git.properties</generateGitPropertiesFilename>
+							<format>json</format>
+							<injectAllReactorProjects>true</injectAllReactorProjects>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>ru.yaal.maven</groupId>
+						<artifactId>write-text-files-maven-plugin</artifactId>
+						<version>1.1</version>
+						<configuration>
+							<charset>UTF-8</charset>
+							<files>
+								<file>
+									<path>.././.env</path>
+									<lines>
+										<line>api_tag=${version.number}</line>
+									</lines>
+								</file>
+							</files>
+						</configuration>
+						<executions>
+							<execution>
+								<id>write-text-files</id>
+								<phase>prepare-package</phase>
+								<goals>
+									<goal>write-text-files</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>com.google.cloud.tools</groupId>
+						<artifactId>jib-maven-plugin</artifactId>
+						<version>2.5.2</version>
+						<configuration>
+							<from>
+								<image>java:8</image>
+							</from>
+							<to>
+								<image>docker.io/gofnusiss/travel-plan-automated-builder:${version.number}</image>
+							</to>
+							<container>
+								<jvmFlags>
+									<jvmFlag>-Xms256m</jvmFlag>
+									<jvmFlag>-Xmx512m</jvmFlag>
+								</jvmFlags>
+								<ports>
+									<port>8003</port>
+								</ports>
+							</container>
+							<allowInsecureRegistries>true</allowInsecureRegistries>
+						</configuration>
+						<executions>
+							<execution>
+								<phase>install</phase>
+								<goals>
+									<goal>build</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
 	<dependencies>
 		<!--Neo4j-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-neo4j</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.neo4j</groupId>
+					<artifactId>neo4j-ogm-http-driver</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-neo4j</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.neo4j</groupId>
+			<artifactId>neo4j-ogm-bolt-driver</artifactId>
 		</dependency>
 
-		<!-- hystrix -->
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
-		</dependency>
-		<!-- register provider into eureka -->
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-		</dependency>
+
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -62,7 +185,6 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<optional>true</optional>
 		</dependency>
 
 		<dependency>
@@ -91,6 +213,11 @@
 			<groupId>net.logstash.logback</groupId>
 			<artifactId>logstash-logback-encoder</artifactId>
 			<version>5.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>5.2.8.RELEASE</version>
 		</dependency>
 	</dependencies>
 

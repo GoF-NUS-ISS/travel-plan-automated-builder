@@ -2,10 +2,10 @@ FROM java:8
 
 VOLUME /tmp
 
-ADD ./target/microservicecloud.jar ./travel_builder.jar
+ADD ./target/travel-automated-builder-0.0.1.jar ./travel-automated-builder-0.0.1.jar
 
-RUN bash -c 'touch ./travel_builder.jar'
+RUN bash -c 'touch ./travel-automated-builder-0.0.1.jar'
 
-EXPOSE 8002
+EXPOSE 8003
 
-ENTRYPOINT ["java", "-jar", "./travel_builder.jar"]
+ENTRYPOINT ["java", "-jar", "./travel-automated-builder-0.0.1.jar"]

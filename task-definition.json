@@ -1,0 +1,110 @@
+{
+  "containerDefinitions": [
+    {
+      "environment": [
+        {
+          "name": "NEO4J_AUTH",
+          "value": "none"
+        },
+        {
+          "name": "NEO4J_ACCEPT_LICENSE_AGREEMENT",
+          "value": "yes"
+        },
+        {
+          "name": "NEO4J_dbms_security_procedures_unrestricted",
+          "value": "gds.*"
+        },
+        {
+          "name": "NEO4J_dbms_connector_http_listen__address",
+          "value": ":7474"
+        },
+        {
+          "name": "NEO4J_dbms_connector_https_listen__address",
+          "value": ":6477"
+        },
+        {
+          "name": "NEO4J_dbms_connector_bolt_listen__address",
+          "value": ":7687"
+        },
+        {
+          "name": "NEO4J_dbms_connector_bolt_advertised__address",
+          "value": ":7687"
+        },
+        {
+          "name": "NEO4J_dbms_memory_heap_initial__size",
+          "value": "1024m"
+        },
+        {
+          "name": "NEO4J_dbms_memory_heap_max__size",
+          "value": "1024m"
+        },
+        {
+          "name": "NEO4J_dbms_memory_pagecache_size",
+          "value": "256m"
+        },
+        {
+          "name": "NEO4JLABS_PLUGINS",
+          "value": "[\"graph-data-science\"]"
+        }
+      ],
+      "essential": true,
+      "name": "travel-plan-automated-builder",
+      "image": "",
+      "portMappings": [
+        {
+          "containerPort": 8003,
+          "hostPort": 8003,
+          "protocol": "tcp"
+        }
+      ],
+      "mountPoints": [
+        {
+          "containerPath": "/log",
+          "sourceVolume": "efs-volume"
+        }
+      ],
+      "logConfiguration":{
+        "logDriver":"awslogs",
+        "options":{
+          "awslogs-group":"ecs/travel-app-log-grp-main-app",
+          "awslogs-region":"us-east-1",
+          "awslogs-stream-prefix":"automated-builder"
+        }
+      }
+    },
+    {
+      "essential": true,
+      "name": "neo4j",
+      "image": "docker.io/neo4j:4.0.4",
+      "portMappings": [
+        {
+          "containerPort": 7474,
+          "hostPort": 7474,
+          "protocol": "http"
+        },
+        {
+          "containerPort": 7687,
+          "hostPort": 7687,
+          "protocol": "bolt"
+        }
+      ]
+    }
+  ],
+  "cpu": "1024",
+  "executionRoleArn": "arn:aws:iam::356567610291:role/ecsTaskExecutionRole",
+  "family": "f-task-def-travel-automated-builder-api",
+  "memory": "4096",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": [
+    "FARGATE"
+  ],
+  "volumes": [
+    {
+      "name": "efs-volume",
+      "efsVolumeConfiguration": {
+        "fileSystemId": "fs-c2633f40",
+        "transitEncryption": "ENABLED"
+      }
+    }
+  ]
+}
