@@ -190,7 +190,6 @@ public class GeneratePlanController {
                         isNextToCost.setActivity((Activity) prevEntity);
                         isNextToCost.setActivity1(activityNode);
                         isNextToCostList.add(isNextToCost);
-                        (activityNode).setIsNextToCost(isNextToCostList);
                         ((Activity) prevEntity).setIsNextToCost(isNextToCostList);
                     }
                     if(prevEntity instanceof Location){
@@ -239,7 +238,6 @@ public class GeneratePlanController {
                 travelCost.setEndLoc(end);
                 travelCostList.add(travelCost);
                 start.setTravelCost(travelCostList);
-                end.setTravelCost(travelCostList);
 
                 if(nodeEntityLinkedList.getPrev() != null && nodeEntityLinkedList.getPrev().getAbstractNodeEntity() != null){
                     AbstractNodeEntity prevEntity = nodeEntityLinkedList.getPrev().getAbstractNodeEntity();

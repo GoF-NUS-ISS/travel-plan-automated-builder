@@ -57,29 +57,14 @@ public class Neo4JDbGeneratePlanRepository implements IGeneratePlanRepository {
                     updateLocationOutgoingNodes(currLocationInDB, newLocation);
 
                     //point incoming edge to current node
-                    updateLocationIncomingNodes(currLocationInDB, linkedListNode.getPrev());
-                    updateLocationIncomingNodes(currLocationInDB, linkedListNode.getNext());
+                    updateLocationIncomingLocation(currLocationInDB, linkedListNode.getPrev(), entityList);
+                    updateLocationIncomingActivity(currLocationInDB, linkedListNode.getPrev(), entityList);
+
+                    //For next node, only can update Activity as Location as no incoming relationship
+                    updateLocationIncomingActivity(currLocationInDB, linkedListNode.getNext(), entityList);
 
                     entityList.add(currLocationInDB);
                 }
-            }
-            if(abstractNodeEntity instanceof Activity){
-                Activity newActivity = ((Activity) abstractNodeEntity);
-                List<Activity> activityList = activityRepository.findActivityByString(newActivity.getCategory(), newActivity.getDescription(), newActivity.getCost(), newActivity.getSeconds(), newActivity.getStars());
-                if(!activityList.isEmpty()){
-                    Activity currActivityInDB = activityList.get(0);
-                    matchFound = true;
-                    log.info("current activity {} found", currActivityInDB);
-                    //move outgoing edge to current node
-                    updateActivityOutgoingNodes(currActivityInDB, newActivity);
-
-                    //point incoming edge to current node
-                    updateActivityIncomingNodes(currActivityInDB, linkedListNode.getPrev());
-                    updateActivityIncomingNodes(currActivityInDB, linkedListNode.getNext());
-
-                    entityList.add(currActivityInDB);
-                }
-
             }
             linkedListNode = linkedListNode.getPrev();
         }
@@ -90,70 +75,57 @@ public class Neo4JDbGeneratePlanRepository implements IGeneratePlanRepository {
         }
     }
 
-    private void updateActivityOutgoingNodes(Activity currActivityInDB, Activity newActivity) {
-        List<IsNextToCost> currNextToCostList = currActivityInDB.getIsNextToCost();
-        if(currNextToCostList == null){
-            currNextToCostList = new ArrayList<>();
-        }
-        IsNextToCost isNextToCost = newActivity.getIsNextToCost().get(0);
-        isNextToCost.setActivity1(currActivityInDB);
-        currNextToCostList.add(isNextToCost);
-        currActivityInDB.setIsNextToCost(currNextToCostList);
-
-        List<IsLocatedCost> isLocatedCostList = currActivityInDB.getIsLocatedCost();
-        if(isLocatedCostList == null){
-            isLocatedCostList = new ArrayList<>();
-        }
-        IsLocatedCost isLocatedCost = newActivity.getIsLocatedCost().get(0);
-        isLocatedCost.setActivity(currActivityInDB);
-        isLocatedCostList.add(isLocatedCost);
-        currActivityInDB.setIsLocatedCost(isLocatedCostList);
-
-    }
-
-    private void updateActivityIncomingNodes(Activity currActivityInDB, AbstractNodeEntityLinkedList linkedListNode) {
-        if (linkedListNode != null){
+    private void updateLocationIncomingLocation(Location currLocationInDB, AbstractNodeEntityLinkedList linkedListNode, List<AbstractNodeEntity> entityList) {
+        if(linkedListNode != null){
             AbstractNodeEntity entity = linkedListNode.getAbstractNodeEntity();
-            if(entity instanceof Activity){
-                List<IsNextToCost> isNextToCostList = ((Activity) entity).getIsNextToCost();
-                isNextToCostList.get(0).setActivity(currActivityInDB);
-            }
             if(entity instanceof Location){
-                List<HasActivityCost> hasActivityCostList = ((Location) entity).getHasActivityCost();
-                hasActivityCostList.get(0).setActivity(currActivityInDB);
+                List<TravelCost> travelCostList = ((Location) entity).getTravelCost();
+                if(travelCostList != null && !travelCostList.isEmpty()){
+                    log.info("incoming location");
+                    travelCostList.get(0).setStartLoc(currLocationInDB);
+                    entityList.add(entity);
+                }
             }
         }
     }
 
-    private void updateLocationOutgoingNodes(Location currLocationInDB, Location newLocation) {
-        List<HasActivityCost> currActCostList = currLocationInDB.getHasActivityCost();
-        if(currActCostList == null){
-            currActCostList = new ArrayList<>();
-        }
-        HasActivityCost newActCost = newLocation.getHasActivityCost().get(0);
-        newActCost.setLocation(currLocationInDB);
-        currActCostList.add(newActCost);
-        currLocationInDB.setHasActivityCost(currActCostList);
-
-        List<TravelCost> currTravelCostList = currLocationInDB.getTravelCost();
-        if(currTravelCostList == null){
-            currTravelCostList = new ArrayList<>();
-        }
-        currTravelCostList.add(newLocation.getTravelCost().get(0));
-        currLocationInDB.setTravelCost(currTravelCostList);
-    }
-
-    private void updateLocationIncomingNodes(Location currLocationInDB, AbstractNodeEntityLinkedList linkedListNode) {
-        if (linkedListNode != null){
+    private void updateLocationIncomingActivity(Location currLocationInDB, AbstractNodeEntityLinkedList linkedListNode, List<AbstractNodeEntity> entityList) {
+        if(linkedListNode != null){
             AbstractNodeEntity entity = linkedListNode.getAbstractNodeEntity();
             if(entity instanceof Activity){
                 List<IsLocatedCost> isLocatedCostList = ((Activity) entity).getIsLocatedCost();
-                isLocatedCostList.get(0).setLocation(currLocationInDB);
+                if(isLocatedCostList != null && !isLocatedCostList.isEmpty()){
+                    log.info("incoming activity");
+                    isLocatedCostList.get(0).setLocation(currLocationInDB);
+                    entityList.add(entity);
+                }
             }
-            if(entity instanceof Location){
-                List<TravelCost> travelCostList = ((Location) entity).getTravelCost();
-                travelCostList.get(0).setStartLoc(currLocationInDB);
+        }
+    }
+
+
+    private void updateLocationOutgoingNodes(Location currLocationInDB, Location newLocation) {
+        if(newLocation.getHasActivityCost() != null && !newLocation.getHasActivityCost().isEmpty()){
+            List<HasActivityCost> currActCostList = currLocationInDB.getHasActivityCost();
+            if(currActCostList == null){
+                currActCostList = new ArrayList<>();
             }
+            HasActivityCost newActCost = newLocation.getHasActivityCost().get(0);
+            newActCost.setLocation(currLocationInDB);
+            currActCostList.add(newActCost);
+            currLocationInDB.setHasActivityCost(currActCostList);
+            log.info("outgoing");
+        }
+
+        if(newLocation.getTravelCost() != null && !newLocation.getTravelCost().isEmpty()){
+            List<TravelCost> currTravelCostList = currLocationInDB.getTravelCost();
+
+            if(currTravelCostList == null){
+                currTravelCostList = new ArrayList<>();
+            }
+
+            currTravelCostList.add(newLocation.getTravelCost().get(0));
+            currLocationInDB.setTravelCost(currTravelCostList);
         }
     }
 

@@ -34,4 +34,12 @@ public class IsNextToCost extends AbstractCostNode {
     public void setActivity1(Activity activity1) {
         this.activity1 = activity1;
     }
+
+    @Override
+    public String toString() {
+        return "IsNextToCost{" +
+                "activity=" + activity.getDescription() +
+                ", activity1=" + activity1.getId() +
+                '}';
+    }
 }
