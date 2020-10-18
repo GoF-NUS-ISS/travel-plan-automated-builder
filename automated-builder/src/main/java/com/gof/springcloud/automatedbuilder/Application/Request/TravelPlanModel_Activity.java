@@ -1,11 +1,13 @@
 package com.gof.springcloud.automatedbuilder.Application.Request;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -33,8 +35,12 @@ public class TravelPlanModel_Activity extends TravelPlanModel_DayNode {
     public String location;
 
     @ApiModelProperty(value = "time start")
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     public LocalDateTime timeStart;
 
     @ApiModelProperty(value = "time end")
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     public LocalDateTime timeEnd;
 }

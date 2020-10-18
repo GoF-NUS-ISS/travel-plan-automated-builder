@@ -6,7 +6,6 @@ import com.gof.springcloud.automatedbuilder.Domain.Graph.AbstractNodeEntityLinke
 import com.gof.springcloud.automatedbuilder.Domain.Graph.TravelActivity.Activity;
 import com.gof.springcloud.automatedbuilder.Domain.Graph.TravelActivity.HasActivityCost;
 import com.gof.springcloud.automatedbuilder.Domain.Graph.TravelActivity.IsLocatedCost;
-import com.gof.springcloud.automatedbuilder.Domain.Graph.TravelActivity.IsNextToCost;
 import com.gof.springcloud.automatedbuilder.Domain.Graph.TravelLeg.Location;
 import com.gof.springcloud.automatedbuilder.Domain.Graph.TravelLeg.TravelCost;
 import com.gof.springcloud.automatedbuilder.Domain.Repository.IGeneratePlanRepository;

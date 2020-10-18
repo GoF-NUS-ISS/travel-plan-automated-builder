@@ -1,8 +1,6 @@
 package com.gof.springcloud.automatedbuilder.Infrastructure.Repository;
 
-import com.gof.springcloud.automatedbuilder.Domain.Graph.AbstractNodeEntity;
 import com.gof.springcloud.automatedbuilder.Domain.Graph.TravelActivity.Activity;
-import com.gof.springcloud.automatedbuilder.Domain.Graph.TravelLeg.Location;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.repository.query.Param;

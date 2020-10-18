@@ -14,7 +14,7 @@ spring:
   application:
     name: microservicecloud-travel-builder
     setting:
-      dayduration: 8
+      dayDuration: 8
       hrsPastMidnight: 8
       timeZone: Asia/Shanghai
       dateFormat: dd/MM/yyyy HH:mm
