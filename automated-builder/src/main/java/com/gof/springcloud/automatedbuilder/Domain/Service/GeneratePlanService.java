@@ -11,16 +11,16 @@ import java.util.List;
 @Slf4j
 public class GeneratePlanService implements IGeneratePlanService {
 
-    private final IGeneratePlanRepository repository;
+    private IGeneratePlanRepository repository;
 
-    public GeneratePlanService(final IGeneratePlanRepository repository){
+    public GeneratePlanService(IGeneratePlanRepository repository){
         this.repository = repository;
     }
 
     @Override
     public AbstractNodeEntity SavePlanAsGraph(AbstractNodeEntity entity, AbstractNodeEntityLinkedList linkedList){
         log.info("saving plan in service layer");
-        repository.Save(entity, linkedList);
+        entity = repository.Save(entity, linkedList);
         log.info("Saved");
 
         return entity;
