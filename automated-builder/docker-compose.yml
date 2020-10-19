@@ -4,7 +4,7 @@ services:
   travel-plan-automated-builder:
     build: .
     image: travel-plan-automated-builder
-    container_name: travel-plan-automated-builder
+    container_name: travel-plan-automated-builder.local
     ports:
       - "8003:8003"
     volumes:
