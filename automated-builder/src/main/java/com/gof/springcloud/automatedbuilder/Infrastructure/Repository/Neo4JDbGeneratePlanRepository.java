@@ -6,7 +6,6 @@ import com.gof.springcloud.automatedbuilder.Domain.Graph.AbstractNodeEntityLinke
 import com.gof.springcloud.automatedbuilder.Domain.Graph.TravelActivity.Activity;
 import com.gof.springcloud.automatedbuilder.Domain.Graph.TravelActivity.HasActivityCost;
 import com.gof.springcloud.automatedbuilder.Domain.Graph.TravelActivity.IsLocatedCost;
-import com.gof.springcloud.automatedbuilder.Domain.Graph.TravelActivity.IsNextToCost;
 import com.gof.springcloud.automatedbuilder.Domain.Graph.TravelLeg.Location;
 import com.gof.springcloud.automatedbuilder.Domain.Graph.TravelLeg.TravelCost;
 import com.gof.springcloud.automatedbuilder.Domain.Repository.IGeneratePlanRepository;
@@ -41,7 +40,7 @@ public class Neo4JDbGeneratePlanRepository implements IGeneratePlanRepository {
     }
 
     @Override
-    public void Save(AbstractNodeEntity entity, AbstractNodeEntityLinkedList linkedListNode){
+    public AbstractNodeEntity Save(AbstractNodeEntity entity, AbstractNodeEntityLinkedList linkedListNode){
         List<AbstractNodeEntity> entityList = new ArrayList<>();
         boolean matchFound = false;
         while(linkedListNode != null){
@@ -73,6 +72,8 @@ public class Neo4JDbGeneratePlanRepository implements IGeneratePlanRepository {
         } else {
             neo4jRepository.save(entity);
         }
+
+        return entity;
     }
 
     private void updateLocationIncomingLocation(Location currLocationInDB, AbstractNodeEntityLinkedList linkedListNode, List<AbstractNodeEntity> entityList) {

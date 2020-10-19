@@ -1,8 +1,6 @@
 package com.gof.springcloud.automatedbuilder.Infrastructure.Repository;
 
-import com.gof.springcloud.automatedbuilder.Domain.Graph.AbstractNodeEntity;
 import com.gof.springcloud.automatedbuilder.Domain.Graph.TravelActivity.Activity;
-import com.gof.springcloud.automatedbuilder.Domain.Graph.TravelLeg.Location;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.repository.query.Param;
@@ -11,7 +9,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Map;
 
-@Repository
 public interface SpringDataNeo4jActivityRepository extends Neo4jRepository<Activity, Long> {
     @Query("MATCH (n:Activity) WHERE n.category=$category AND n.cost=$cost AND n.description=$description AND n.seconds=$seconds AND n.stars=$stars RETURN n")
     List<Activity> findActivityByString(String category,  String description, double cost, long seconds, int stars);
