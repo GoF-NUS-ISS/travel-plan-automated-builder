@@ -18,10 +18,12 @@ public class GeneratePlanService implements IGeneratePlanService {
     }
 
     @Override
-    public void SavePlanAsGraph(AbstractNodeEntity entity, AbstractNodeEntityLinkedList linkedList){
+    public AbstractNodeEntity SavePlanAsGraph(AbstractNodeEntity entity, AbstractNodeEntityLinkedList linkedList){
         log.info("saving plan in service layer");
         repository.Save(entity, linkedList);
         log.info("Saved");
+
+        return entity;
     }
 
     @Override

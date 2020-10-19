@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Map;
 
-@Repository
 public interface SpringDataNeo4jActivityRepository extends Neo4jRepository<Activity, Long> {
     @Query("MATCH (n:Activity) WHERE n.category=$category AND n.cost=$cost AND n.description=$description AND n.seconds=$seconds AND n.stars=$stars RETURN n")
     List<Activity> findActivityByString(String category,  String description, double cost, long seconds, int stars);
