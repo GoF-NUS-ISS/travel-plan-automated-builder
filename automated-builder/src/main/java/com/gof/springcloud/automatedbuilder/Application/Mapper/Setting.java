@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Data
 @Component
-@ConfigurationProperties(prefix = "setting")
+@ConfigurationProperties(prefix = "spring.application.setting")
 public class Setting {
     //@Value("${spring.application.setting.dayduration}")
     private int dayDuration;

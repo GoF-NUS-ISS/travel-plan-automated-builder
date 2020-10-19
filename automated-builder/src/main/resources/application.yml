@@ -24,3 +24,16 @@ info:
   company.name: www.gof.com
   build.artifactId: $project.artifactId$
   build.version: $project.version$
+
+travelplanapi:
+
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+        loggerLevel: headers
+        url: travel-plan-api:8001
+
