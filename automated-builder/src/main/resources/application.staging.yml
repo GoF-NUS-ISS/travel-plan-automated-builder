@@ -1,7 +1,0 @@
-eureka:
-  client: #client register into eureka
-    service-url:
-      defaultZone: http://eureka1:7001/eureka/
-  instance:
-    instance-id: microservicecloud-travel-builder8002
-    prefer-ip-address: true

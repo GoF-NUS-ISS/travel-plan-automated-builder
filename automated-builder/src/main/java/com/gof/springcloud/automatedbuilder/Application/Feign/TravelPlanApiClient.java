@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 @FeignClient(value = "travel-plan-api", url = "${feign.client.config.default.url}")
 public interface TravelPlanApiClient {
 
-    @PostMapping("/travelPlan")
-    TravelPlanModel addPlan(@RequestBody TravelPlanModel travelPlan);
+    @PostMapping("/travelPlanBuilder")
+    String addPlanBuilder(@RequestBody TravelPlanModel travelPlan);
 }

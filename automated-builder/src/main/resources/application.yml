@@ -25,8 +25,13 @@ info:
   build.artifactId: $project.artifactId$
   build.version: $project.version$
 
-travelplanapi:
-
+eureka:
+  client: #client register into eureka
+    service-url:
+      defaultZone: http://eureka.local:7001/eureka/
+  instance:
+    instance-id: microservicecloud-travel-builder8003
+    prefer-ip-address: true
 
 feign:
   client:
@@ -35,5 +40,5 @@ feign:
         connectTimeout: 5000
         readTimeout: 5000
         loggerLevel: headers
-        url: travel-plan-api:8001
+        url: travel-plan-api.local:8001
 
