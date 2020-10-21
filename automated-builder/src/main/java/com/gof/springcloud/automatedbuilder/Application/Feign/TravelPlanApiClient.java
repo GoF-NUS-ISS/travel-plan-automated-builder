@@ -5,7 +5,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(value = "travel-plan-api", url = "${feign.client.config.default.url}")
+@FeignClient(value = "${feign.client.config.default.value}", url = "${feign.client.config.default.url}", fallbackFactory = TravelPlanApiClientFallbackFactory.class)
 public interface TravelPlanApiClient {
 
     @PostMapping("/travelPlanBuilder")
