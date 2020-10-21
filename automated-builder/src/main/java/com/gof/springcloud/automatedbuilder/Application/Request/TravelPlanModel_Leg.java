@@ -26,13 +26,13 @@ public class TravelPlanModel_Leg extends TravelPlanModel_DayNode {
     private String to;
 
     @ApiModelProperty(value = "start on")
-    @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSS")
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
+    @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     public LocalDateTime startOn;
 
     @ApiModelProperty(value = "stop at")
-    @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSS")
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
+    @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     public LocalDateTime stopAt;
 
     @ApiModelProperty(value = "transport mode")

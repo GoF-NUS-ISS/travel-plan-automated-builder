@@ -22,8 +22,8 @@ import java.util.List;
 public class TravelPlanModel_Day {
 
     @ApiModelProperty(value = "current date")
-    @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSS")
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
+    @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime date;
 
     @ApiModelProperty(value = "nodes")

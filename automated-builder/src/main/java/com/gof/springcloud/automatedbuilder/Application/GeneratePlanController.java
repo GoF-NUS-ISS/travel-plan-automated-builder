@@ -43,6 +43,7 @@ public class GeneratePlanController {
         List<AbstractNodeEntity> entityList = generatePlanService.GeneratePlan(queryBody);
         log.info("Convert graph to model");
         TravelPlanModel travelPlanModel = GraphToModelMapper.convert(entityList, setting);
+        travelPlanModel.setName(queryBody.getName());
         String id = travelPlanApiClient.addPlanBuilder(travelPlanModel);
         log.info("Return model id: {}", id);
         return ResponseEntity.status(HttpStatus.OK).body(id);
