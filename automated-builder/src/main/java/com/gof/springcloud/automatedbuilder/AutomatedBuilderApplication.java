@@ -17,7 +17,7 @@ import org.springframework.web.filter.CorsFilter;
 @EnableFeignClients
 @EnableEurekaClient //Register into eureka after initiation
 @EnableDiscoveryClient
-//@EnableCircuitBreaker //import hystrix for fusing mechanism
+@EnableCircuitBreaker //import hystrix for fusing mechanism
 @EnableCaching
 public class AutomatedBuilderApplication {
 
