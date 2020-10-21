@@ -10,7 +10,7 @@ spring:
     neo4j:
       username: neo4j
       password: neo4j
-      uri: bolt://neo4j:7687
+      uri: bolt://localhost:7687
   application:
     name: microservicecloud-travel-builder
     setting:
