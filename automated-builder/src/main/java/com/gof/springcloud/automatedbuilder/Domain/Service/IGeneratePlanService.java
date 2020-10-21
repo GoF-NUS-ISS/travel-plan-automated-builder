@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface IGeneratePlanService {
 
-    void SavePlanAsGraph(AbstractNodeEntity entity, AbstractNodeEntityLinkedList linkedList);
+    AbstractNodeEntity SavePlanAsGraph(AbstractNodeEntity entity, AbstractNodeEntityLinkedList linkedList);
 
     List<AbstractNodeEntity> GeneratePlan(QueryBody body);
 }

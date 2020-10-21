@@ -6,6 +6,7 @@ import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
 import java.util.List;
+import java.util.Objects;
 
 @NodeEntity
 public class Activity extends AbstractNodeEntity {
@@ -104,6 +105,19 @@ public class Activity extends AbstractNodeEntity {
 
     public void setIsNextToCost(List<IsNextToCost> isNextToCost) {
         this.isNextToCost = isNextToCost;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Activity activity = (Activity) o;
+        return Objects.equals(category, activity.category);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(category);
     }
 }
 

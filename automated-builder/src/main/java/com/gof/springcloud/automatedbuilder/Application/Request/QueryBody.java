@@ -28,6 +28,8 @@ public class QueryBody {
     private int startCost;
     @ApiModelProperty(value = "endCost")
     private int endCost;
+    @ApiModelProperty(value = "name")
+    private String name;
 
     public boolean validate(){
         return this.getStartCost()<=this.getEndCost() &&
