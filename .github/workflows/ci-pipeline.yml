@@ -33,7 +33,7 @@ jobs:
         key: ${{ runner.os }}-sonar
         restore-keys: ${{ runner.os }}-sonar
     - name: Verify Maven packages
-        run: mvn -f automated-builder/pom.xml clean install org.simplify4u.plugins:pgpverify-maven-plugin:check
+      run: mvn -f automated-builder/pom.xml clean install org.simplify4u.plugins:pgpverify-maven-plugin:check
     - name: Cache Maven packages
       uses: actions/cache@v1
       with:
