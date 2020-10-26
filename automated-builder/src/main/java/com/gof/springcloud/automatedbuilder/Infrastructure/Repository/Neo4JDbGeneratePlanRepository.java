@@ -39,6 +39,13 @@ public class Neo4JDbGeneratePlanRepository implements IGeneratePlanRepository {
         this.locationRepository = locationRepository;
     }
 
+
+    @Override
+    public void delete() {
+        activityRepository.deleteAll();
+        locationRepository.deleteAll();
+    }
+
     @Override
     public AbstractNodeEntity Save(AbstractNodeEntity entity, AbstractNodeEntityLinkedList linkedListNode){
         List<AbstractNodeEntity> entityList = new ArrayList<>();

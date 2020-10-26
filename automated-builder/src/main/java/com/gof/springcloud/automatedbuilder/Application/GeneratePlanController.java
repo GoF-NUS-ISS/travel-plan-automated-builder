@@ -48,4 +48,9 @@ public class GeneratePlanController {
         log.info("Return model id: {}", id);
         return ResponseEntity.status(HttpStatus.OK).body(id);
     }
+
+    @GetMapping("/deleteAll")
+    public void deleteAll(){
+        generatePlanService.delete();
+    }
 }

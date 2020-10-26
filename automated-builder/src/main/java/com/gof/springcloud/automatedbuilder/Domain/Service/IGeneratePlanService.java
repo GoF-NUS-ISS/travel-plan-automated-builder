@@ -11,4 +11,6 @@ public interface IGeneratePlanService {
     AbstractNodeEntity SavePlanAsGraph(AbstractNodeEntity entity, AbstractNodeEntityLinkedList linkedList);
 
     List<AbstractNodeEntity> GeneratePlan(QueryBody body);
+
+    void delete();
 }

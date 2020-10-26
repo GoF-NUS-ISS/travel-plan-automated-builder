@@ -10,4 +10,6 @@ public interface IGeneratePlanRepository {
     AbstractNodeEntity Save(AbstractNodeEntity entity, AbstractNodeEntityLinkedList linkedList);
 
     List<AbstractNodeEntity> GeneratePlan(QueryBody body);
+
+    void delete();
 }

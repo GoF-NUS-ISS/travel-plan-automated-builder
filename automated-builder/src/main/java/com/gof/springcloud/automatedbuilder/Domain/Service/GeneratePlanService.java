@@ -30,4 +30,9 @@ public class GeneratePlanService implements IGeneratePlanService {
     public List<AbstractNodeEntity> GeneratePlan(QueryBody body) {
         return repository.GeneratePlan(body);
     }
+
+    @Override
+    public void delete() {
+        repository.delete();
+    }
 }
